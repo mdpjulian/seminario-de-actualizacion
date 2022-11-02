@@ -10,17 +10,9 @@ $object = json_decode($json_body);
 $password = $object->password;
 $username = $object->username;
 
-function createUserSession( $id_user )
-{
-	$token = hash('sha256', $username.$password);
-
-	$SQLStatement = $connection->prepare("CALL `create_user_session`(:id_user, :token)");
-	$SQLStatement->bindParam( ':id_user', $id_user );
-	$SQLStatement->bindParam( ':token', $token );
-	$SQLStatement->execute();
-
-	return $token;
-}
+//to test use: 
+//username: bcrypt
+//password: carro25
 
 function authenticateUser ($username, $password, $connection){
 	
@@ -38,10 +30,16 @@ function authenticateUser ($username, $password, $connection){
 		$user_id = $queryResult[0]["id"];
 
 		
-		// modificar todo para que ande!!!
 		if($user_id && password_verify($password, $hashDB)){
-			//createUserSession($user_id);
-			$status = array('status' => 'valid login', 'userid' => createUserSession($user_id));
+
+			$token = hash('sha256', $username.$hashDB);
+
+			$SQLStatement = $connection->prepare("CALL `create_user_session`(:token, :user_id)");
+			$SQLStatement->bindParam( ':token', $token );
+			$SQLStatement->bindParam( ':user_id', $user_id );
+			$SQLStatement->execute();
+
+			$status = array('status' => 'valid login', 'token' => $token);
 		}else{
 			$status = array('status' => 'invalid', 'description' => "Invalid username or password");
 		}
@@ -58,7 +56,6 @@ function authenticateUser ($username, $password, $connection){
 try{
 
 	authenticateUser($username, $password, $connection);
-	
 	
 
 }catch( PDOException $connectionException ){
