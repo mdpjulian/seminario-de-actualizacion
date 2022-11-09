@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Aplicación de Chat</title>
+</head>
+
+<body>
+   <h1>Bienvenidos a Uasá</h1>
+   <button id="btnConnect">Conectar</button>
+   <button>Desconectar</button>
+
+   <br>
+
+   <h4>Usuario A</h4>
+   <textarea>
+      
+   </textarea>
+   <br>
+   <input id="fldMessage" type="text" name="" value="">
+   <button id="btnSend">Enviar</button>
+
+   <h4>Usuario B</h4>
+   <textarea id="PantallaB" rows="5" cols="25">
+      
+   </textarea>
+   <br>
+   <input type="text" name="">
+   <button>Enviar</button>
+
+</body>
+<script type="text/javascript" src="aes.js"></script>
+<script type="text/javascript">
+
+
+function connect()
+{
+   let data =
+   {
+      method: 'POST',
+      body: JSON.stringify(null)
+   };
+
+   fetch("./connect_users.php", data ).
+   then( response => response.json() ).
+   then( response => 
+   {
+      sessionStorage.setItem('chatKey', response );
+      alert('Connected Sucessfully');
+   } );
+}
+
+//Funciones auxiliares
+function encryptMessage(publicKey, message)
+{
+   let encrypted_message = CryptoJS.AES.encrypt(message, publicKey).toString();
+   let data = {
+      sender: 'A',
+      target: 'B',
+      message: encrypted_message
+   }
+   return data;
+}
+function decryptMessage(publicKey, encrypted)
+{
+   var decrypted_message = CryptoJS.AES.decrypt(encrypted, publicKey).toString(CryptoJS.enc.Utf8);
+   if(decrypted_message == ""){
+      PantallaB.value = "se recibio un mensaje vacio!";
+   }else{
+      PantallaB.value = "Mensaje nuevo recibido(1)!: \n " + decrypted_message;
+   }
+}
+
+   
+function send()
+{
+    let data =
+   {
+      method: 'POST',
+      body: JSON.stringify( encryptMessage(sessionStorage.getItem('chatKey'),fldMessage.value) )
+   };
+
+   fetch("./send_message.php", data ).
+   then( response => response.json() ).
+   then( response => 
+   {
+     decryptMessage(sessionStorage.getItem('chatKey'), response)
+   } );
+}
+
+function main()
+{
+   PantallaB.value = "";
+   btnConnect.addEventListener('click', ()=>connect() );
+   btnSend.addEventListener('click', ()=>send() );
+}
+
+window.addEventListener('load', ()=>main() );
+
+</script>
+
+</html>
