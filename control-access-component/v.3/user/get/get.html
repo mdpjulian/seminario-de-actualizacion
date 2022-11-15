@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Get Users Screen</title>
+</head>
+<body>
+
+<h1>Get Users Form Screen</h1>
+<button id="getUsersButton">Get Users</button>
+<div id= userlist></div>
+
+</body>
+
+<script type="text/javascript">
+	
+
+
+
+
+function listUsers(list){
+
+	listDiv = document.getElementById('userlist');
+
+	for (var i = 0; i < list.length; i++) {
+		div = document.createElement('div');
+		div.innerText = "Username: " + list[i]["name"] + "----/////---Password: " + list[i]["password"];
+		listDiv.appendChild(div);
+}
+
+}
+function onGetUsersButtonClick()
+{
+	fetch('./get.php', { method:'post', body: null } ).then( response => response.json() ).then( response => { listUsers(response)} );
+	
+}
+
+document.getElementById('getUsersButton').addEventListener('click', ()=>onGetUsersButtonClick() );
+
+</script>
+</html>

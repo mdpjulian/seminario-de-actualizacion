@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Add User to Group Screen</title>
+</head>
+<body>
+
+<h1>Add User to Group Form Screen</h1>
+<input id="userIdInput" type="text" placeholder="ID del usuario" value="">
+<input id="groupIdInput" type="text" placeholder="ID del grupo" value="">
+<button id="addUserToGroupButton">Add User to Group</button>
+
+</body>
+
+<script type="text/javascript">
+	
+
+
+function getFormValues()
+{
+	let createFormData =
+	{
+		user_id: null,
+		group_id: null
+	};
+
+	createFormData.user_id = document.getElementById('userIdInput').value;
+	createFormData.group_id = document.getElementById('groupIdInput').value;
+
+	return createFormData;
+}
+
+function addUserToGroupButtonClick()
+{
+	fetch('./create.php', { method:'post', body: JSON.stringify(getFormValues()) } ).then( response => response.json() ).then( response => { console.log(response.description)} );
+	
+}
+
+document.getElementById('addUserToGroupButton').addEventListener('click', ()=>addUserToGroupButtonClick() );
+
+</script>
+</html>

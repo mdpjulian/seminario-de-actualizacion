@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Edit User Screen</title>
+</head>
+<body>
+
+<h1>Edit User Form Screen</h1>
+<input id="idInput" type="text" placeholder="ID del usuario" value="">
+<input id="passwordInput" type="password" placeholder="Contraseña" value="">
+<button id="editUserButton">Edit User</button>
+
+</body>
+
+<script type="text/javascript">
+	
+
+
+function getFormValues()
+{
+	let editFormData =
+	{
+		id: null,
+		password: null,
+	};
+
+	editFormData.id = document.getElementById('idInput').value;
+	editFormData.password = document.getElementById('passwordInput').value;
+
+	return editFormData;
+}
+
+function onCreateEditButtonClick()
+{
+	fetch('edit.php', { method:'post', body: JSON.stringify(getFormValues()) } ).then( response => response.json() ).then( response => { alert(response.description)} );
+	
+}
+
+document.getElementById('editUserButton').addEventListener('click', ()=>onCreateEditButtonClick() );
+
+</script>
+</html>

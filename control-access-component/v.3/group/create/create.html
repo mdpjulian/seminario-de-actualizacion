@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Create Group Screen</title>
+</head>
+<body>
+
+<h1>Create Group Form Screen</h1>
+<input id="nameInput" type="text" placeholder="Nombre de Grupo" value="">
+<input id="descriptionInput" type="text" placeholder="Descripcion" value="">
+<button id="createGroupButton">Create Group</button>
+
+</body>
+
+<script type="text/javascript">
+	
+
+
+function getFormValues()
+{
+	let createFormData =
+	{
+		name: null,
+		description: null
+	};
+
+	createFormData.name = document.getElementById('nameInput').value;
+	createFormData.description = document.getElementById('descriptionInput').value;
+
+	return createFormData;
+}
+
+function onCreateGroupButtonClick()
+{
+	fetch('./create.php', { method:'post', body: JSON.stringify(getFormValues()) } ).then( response => response.json() ).then( response => { console.log(response.description)} );
+	
+}
+
+document.getElementById('createGroupButton').addEventListener('click', ()=>onCreateGroupButtonClick() );
+
+</script>
+</html>

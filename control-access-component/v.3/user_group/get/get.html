@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Get Users from Group Screen</title>
+</head>
+<body>
+
+<h1>Get Users from Group Form Screen</h1>
+<button id="getButton">Get Users from Group</button>
+<div id= grouplist></div>
+
+</body>
+
+<script type="text/javascript">
+	
+
+
+
+
+function listGroups(list){
+
+	listDiv = document.getElementById('grouplist');
+
+	for (var i = 0; i < list.length; i++) {
+		div = document.createElement('div');
+		div.innerText = "ID_USER: " + list[i]["id_user"] + "----/////---ID_GROUP: " + list[i]["id_group"];
+		listDiv.appendChild(div);
+}
+
+}
+function onGetUsersfromGroupButtonClick()
+{
+	fetch('./get.php', { method:'post', body: null } ).then( response => response.json() ).then( response => { listGroups(response)} );
+	
+}
+
+document.getElementById('getButton').addEventListener('click', ()=>onGetUsersfromGroupButtonClick() );
+
+</script>
+</html>

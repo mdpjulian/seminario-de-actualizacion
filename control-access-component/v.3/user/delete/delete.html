@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Delete User Screen</title>
+</head>
+<body>
+
+<h1>Delete User Form Screen</h1>
+<input id="idInput" type="text" placeholder="ID del usuario" value="">
+<button id="deleteUserButton">Delete User</button>
+
+</body>
+
+<script type="text/javascript">
+	
+
+
+function getFormValues()
+{
+	let deleteFormData =
+	{
+		id: null,
+	};
+
+	deleteFormData.id = document.getElementById('idInput').value;
+
+	return deleteFormData;
+}
+
+function onDeleteUserButtonClick()
+{
+	fetch('./delete.php', { method:'post', body: JSON.stringify(getFormValues()) } ).then( response => response.json() ).then( response => { console.log(response.description)} );
+	
+}
+
+document.getElementById('deleteUserButton').addEventListener('click', ()=>onDeleteUserButtonClick() );
+
+</script>
+</html>
